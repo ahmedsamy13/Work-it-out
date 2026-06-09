@@ -10,7 +10,6 @@ export const authApi = {
       email: credentials.email,
       password: credentials.password,
     });
-
     if (error) throw error;
     return data;
   },

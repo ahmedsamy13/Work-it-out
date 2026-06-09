@@ -19,7 +19,7 @@ export function useExerciseSearch(delay = 300) {
   return {
     searchTerm,
     setSearchTerm,
-    results: query.data?.data ?? [],
+    results: query.data ?? [],
     isSearching: query.isLoading,
   };
 }

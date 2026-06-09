@@ -1,29 +1,22 @@
 // ─── Exercise Domain Types ─────────────────────────────────────────
 
-import type { ID, Timestamp } from "@/shared/types";
-import type { MuscleGroup, EquipmentType, DifficultyLevel } from "@/shared/constants";
+import type { ID } from "@/shared/types";
 
 export interface Exercise {
   id: ID;
   name: string;
-  description: string;
-  instructions: string[];
-  muscleGroups: {
-    primary: MuscleGroup[];
-    secondary: MuscleGroup[];
-  };
-  equipment: EquipmentType;
-  difficulty: DifficultyLevel;
-  videoUrl?: string;
-  imageUrl?: string;
-  createdAt: Timestamp;
+  target_muscle: string;
+  exercise_type: string;
+  equipment_required: string | null;
+  image_url?: string;
+  description?: string;
+  created_at: string;
 }
 
 export interface ExerciseFilters {
   search: string;
-  muscleGroup: MuscleGroup | null;
-  equipment: EquipmentType | null;
-  difficulty: DifficultyLevel | null;
+  target_muscle: string;
+  equipment_required: string;
 }
 
-export type ExerciseSortField = "name" | "difficulty" | "createdAt";
+export type ExerciseSortField = "name" | "created_at";

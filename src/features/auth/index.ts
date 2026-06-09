@@ -1,10 +1,7 @@
 // ─── Auth Feature: Public API ──────────────────────────────────────
 
 // Types
-export type {
-  LoginCredentials,
-  RegisterCredentials,
-} from "./types";
+export type { LoginCredentials, RegisterCredentials } from "./types";
 
 // Store
 export { useAuthStore } from "./store/authStore";
@@ -20,7 +17,6 @@ export { authApi } from "./api/authApi";
 export { AuthProvider } from "./components/AuthProvider";
 
 // Utils
-export { hasActiveSession } from "./utils/tokenHelpers";
 export {
   validateLoginForm,
   validateRegisterForm,

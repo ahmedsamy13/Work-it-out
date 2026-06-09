@@ -1,35 +1,32 @@
-// ─── Muscle Group Constants ─────────────────────────────────────────
+// ─── Exercise Constants ──────────────────────────────────────────────
 
 export const MUSCLE_GROUPS = [
-  "chest",
-  "back",
-  "shoulders",
-  "biceps",
-  "triceps",
-  "forearms",
-  "core",
-  "quadriceps",
-  "hamstrings",
-  "glutes",
-  "calves",
-  "hip-flexors",
+  "Chest",
+  "Back",
+  "Legs",
+  "Shoulders",
+  "Arms",
+  "Core",
+  "Cardio",
 ] as const;
 
 export type MuscleGroup = (typeof MUSCLE_GROUPS)[number];
 
 export const EQUIPMENT_TYPES = [
-  "barbell",
-  "dumbbell",
-  "machine",
-  "cable",
-  "bodyweight",
-  "kettlebell",
-  "resistance-band",
-  "other",
+  "Barbell",
+  "Dumbbell",
+  "Machine",
+  "Cable",
+  "None",
 ] as const;
 
 export type EquipmentType = (typeof EQUIPMENT_TYPES)[number];
 
-export const DIFFICULTY_LEVELS = ["beginner", "intermediate", "advanced"] as const;
+export const EXERCISE_TYPES = [
+  "Weight & Reps",
+  "Bodyweight",
+  "Time",
+  "Cardio",
+] as const;
 
-export type DifficultyLevel = (typeof DIFFICULTY_LEVELS)[number];
+export type ExerciseType = (typeof EXERCISE_TYPES)[number];

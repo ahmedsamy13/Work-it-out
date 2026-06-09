@@ -1,40 +1,42 @@
 // ─── Exercise API Module ───────────────────────────────────────────
 
-import { apiClient } from "@/shared/lib";
-import type { ApiResponse, PaginatedResponse } from "@/shared/types";
-import type { Exercise, ExerciseFilters } from "../types";
-
-const BASE_PATH = "/exercises";
+import { supabase } from "@/shared/lib";
+import type { Exercise } from "../types";
 
 export const exerciseApi = {
   /**
    * Fetch paginated exercises with optional filters.
    */
-  getAll: async (
-    page = 1,
-    limit = 20,
-    filters?: Partial<ExerciseFilters>
-  ): Promise<PaginatedResponse<Exercise>> => {
-    const params = { page, limit, ...filters };
-    const { data } = await apiClient.get<PaginatedResponse<Exercise>>(BASE_PATH, { params });
+  getAll: async (): Promise<Exercise[]> => {
+    const { data, error } = await supabase.from("exercises").select("*");
+    if (error) throw error;
     return data;
   },
 
   /**
    * Fetch a single exercise by ID.
    */
-  getById: async (id: string): Promise<ApiResponse<Exercise>> => {
-    const { data } = await apiClient.get<ApiResponse<Exercise>>(`${BASE_PATH}/${id}`);
+  getById: async (id: string): Promise<Exercise> => {
+    const { data, error } = await supabase
+      .from("exercises")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
     return data;
   },
 
   /**
-   * Search exercises by name or description.
+   * Search exercises by name .
    */
-  search: async (query: string): Promise<ApiResponse<Exercise[]>> => {
-    const { data } = await apiClient.get<ApiResponse<Exercise[]>>(`${BASE_PATH}/search`, {
-      params: { q: query },
-    });
+  search: async (query: string): Promise<Exercise[]> => {
+    const { data, error } = await supabase
+      .from("exercises")
+      .select("*")
+      .ilike("name", `%${query}%`);
+
+    if (error) throw error;
     return data;
   },
 };
