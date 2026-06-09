@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+/*
+ * ─── Design Token System ────────────────────────────────────────────
+ *
+ * All brand colors, surface colors, and semantic tokens are defined
+ * here using Tailwind v4's @theme block.
+ *
+ * To add dark/light mode in the future:
+ *   1. Wrap token assignments in @media (prefers-color-scheme: light) {}
+ *   2. Or use a [data-theme="light"] attribute on <html> and override below.
+ *
+ * Token Naming Convention:
+ *   --color-bg-*       → Page-level background layers
+ *   --color-surface-*  → Card / panel surfaces
+ *   --color-border-*   → Border colors
+ *   --color-text-*     → Text hierarchy
+ *   --color-brand-*    → Primary brand accent (indigo/purple)
+ *   --color-status-*   → Semantic state colors (success, warning, danger, info)
+ */
+
+@theme {
+  /* ── Brand / Primary ──────────────────────────────────────────── */
+  --color-brand-DEFAULT:       #6366f1; /* indigo-500 */
+  --color-brand-hover:         #4f46e5; /* indigo-600 */
+  --color-brand-muted:         rgba(99, 102, 241, 0.2); /* indigo-500/20 */
+  --color-brand-subtle:        rgba(99, 102, 241, 0.1); /* indigo-500/10 */
+  --color-brand-ring:          #6366f1; /* focus ring */
+  --color-brand-secondary:     #a855f7; /* purple-500 — gradient endpoint */
+
+  /* ── Background Layers ────────────────────────────────────────── */
+  --color-bg-base:             #09090b; /* zinc-950 — page background */
+  --color-bg-subtle:           #18181b; /* zinc-900 — slightly raised */
+
+  /* ── Surface (Cards, Panels, Modals) ─────────────────────────── */
+  --color-surface:             rgba(24, 24, 27, 0.6); /* zinc-900/60 */
+  --color-surface-raised:      #18181b; /* zinc-900 — opaque modal surface */
+  --color-surface-hover:       #27272a; /* zinc-800 — hover state */
+
+  /* ── Borders ──────────────────────────────────────────────────── */
+  --color-border:              #27272a; /* zinc-800 — default border */
+  --color-border-subtle:       #3f3f46; /* zinc-700 — input borders */
+  --color-border-focus:        #6366f1; /* brand on focus */
+
+  /* ── Text Hierarchy ───────────────────────────────────────────── */
+  --color-text-primary:        #f4f4f5; /* zinc-100 — headings, labels */
+  --color-text-secondary:      #a1a1aa; /* zinc-400 — subtext, descriptions */
+  --color-text-muted:          #71717a; /* zinc-500 — placeholder, hint text */
+  --color-text-disabled:       #52525b; /* zinc-600 — disabled / icon muted */
+  --color-text-inverse:        #09090b; /* for text on light backgrounds */
+  --color-text-brand:          #818cf8; /* indigo-400 — active nav, links */
+  --color-text-subtle:         #d4d4d8; /* zinc-300 — mid-level text */
+
+  /* ── Status: Success ─────────────────────────────────────────── */
+  --color-status-success-bg:   rgba(6, 78, 59, 0.5);  /* emerald-900/50 */
+  --color-status-success-text: #34d399;                /* emerald-400 */
+  --color-status-success-border: #065f46;              /* emerald-800 */
+
+  /* ── Status: Warning ─────────────────────────────────────────── */
+  --color-status-warning-bg:   rgba(120, 53, 15, 0.5); /* amber-900/50 */
+  --color-status-warning-text: #fbbf24;                /* amber-400 */
+  --color-status-warning-border: #92400e;              /* amber-800 */
+
+  /* ── Status: Danger ──────────────────────────────────────────── */
+  --color-status-danger-bg:    rgba(127, 29, 29, 0.5); /* red-900/50 */
+  --color-status-danger-text:  #f87171;                /* red-400 */
+  --color-status-danger-border: #991b1b;               /* red-800 */
+  --color-status-danger-solid: #dc2626;                /* red-600 — danger button */
+  --color-status-danger-solid-hover: #b91c1c;          /* red-700 */
+  --color-status-danger-ring:  #ef4444;                /* red-500 */
+
+  /* ── Status: Info ────────────────────────────────────────────── */
+  --color-status-info-bg:      rgba(30, 27, 75, 0.5);  /* indigo-900/50 */
+  --color-status-info-text:    #818cf8;                /* indigo-400 */
+  --color-status-info-border:  #3730a3;                /* indigo-800 */
+
+  /* ── Typography ──────────────────────────────────────────────── */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+
+/*
+ * ─── Base Styles ────────────────────────────────────────────────────
+ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    margin: 0;
+  }
+
+  /* Scrollbar styling for webkit browsers */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-bg-subtle);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-surface-hover);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-border-subtle);
+  }
+}
