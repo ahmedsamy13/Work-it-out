@@ -40,7 +40,7 @@ export function WorkoutLogPage() {
         </div>
         <button
           onClick={handleStartWorkout}
-          className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-brand-DEFAULT to-brand-secondary text-white font-bold rounded-2xl shadow-lg shadow-brand-DEFAULT/20 hover:shadow-brand-DEFAULT/40 hover:-translate-y-0.5 transition-all"
+          className="w-full px-6 py-4 sm:w-auto sm:px-8 bg-gradient-to-r from-brand-DEFAULT to-brand-secondary text-white font-bold text-lg rounded-2xl shadow-lg shadow-brand-DEFAULT/20 hover:shadow-brand-DEFAULT/40 hover:-translate-y-0.5 active:scale-95 transition-all"
         >
           {status === "active" ? "Resume Workout" : "Start Empty Workout"}
         </button>

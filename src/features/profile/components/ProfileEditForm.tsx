@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { UserProfile, ProfileUpdatePayload } from "../types/profile.types";
 import { useUpdateProfile } from "../hooks/useProfile";
 import toast from "react-hot-toast";
+import { X } from "lucide-react";
 
 interface ProfileEditFormProps {
   profile: UserProfile;
@@ -48,7 +49,7 @@ export function ProfileEditForm({ profile, onClose }: ProfileEditFormProps) {
           onClick={onClose}
           className="w-8 h-8 flex items-center justify-center rounded-full bg-surface-hover text-text-secondary hover:text-text-primary transition-colors"
         >
-          
+          <X size={20} />
         </button>
       </div>
 
