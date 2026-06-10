@@ -31,7 +31,7 @@ export function ExerciseGrid({ exercises, isLoading }: ExerciseGridProps) {
   if (exercises.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <span className="text-5xl mb-3">🔍</span>
+        <span className="text-5xl mb-3"></span>
         <p className="text-lg font-medium text-text-primary">No exercises found</p>
         <p className="text-sm text-text-secondary mt-1">
           Try a different filter or muscle group.

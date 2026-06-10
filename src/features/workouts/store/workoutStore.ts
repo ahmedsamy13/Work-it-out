@@ -1,112 +1,169 @@
-// ─── Workout Store (Zustand) ───────────────────────────────────────
-
 import { create } from "zustand";
-import type { Workout, WorkoutExercise, WorkoutSet } from "../types";
+import { persist } from "zustand/middleware";
+import type { Exercise } from "@/features/exercises/types";
+import type {
+  ActiveWorkoutState,
+  ActiveWorkoutExercise,
+  ActiveWorkoutSet,
+} from "../types/workout.types";
 
-interface WorkoutState {
-  /** The currently active workout being logged (null if none) */
-  activeWorkout: Workout | null;
-  /** Past completed workouts */
-  workoutHistory: Workout[];
-  /** Rest timer state */
-  restTimer: { isRunning: boolean; remainingSeconds: number };
-
-  // Actions
-  startWorkout: (name: string) => void;
+interface WorkoutStore extends ActiveWorkoutState {
+  startWorkout: () => void;
+  finishWorkout: () => void;
   cancelWorkout: () => void;
-  completeWorkout: () => void;
-  addExercise: (exercise: Omit<WorkoutExercise, "id" | "sets">) => void;
-  addSet: (exerciseIndex: number, set: Omit<WorkoutSet, "id" | "setNumber">) => void;
-  setWorkoutHistory: (workouts: Workout[]) => void;
-  startRestTimer: (seconds: number) => void;
-  tickRestTimer: () => void;
-  stopRestTimer: () => void;
+
+  addExercise: (exercise: Exercise) => void;
+  removeExercise: (exerciseId: string) => void;
+
+  addSet: (exerciseId: string) => void;
+  removeSet: (exerciseId: string, setId: string) => void;
+  updateSet: (
+    exerciseId: string,
+    setId: string,
+    field: keyof ActiveWorkoutSet,
+    value: string | number | boolean
+  ) => void;
+  toggleSetComplete: (exerciseId: string, setId: string) => void;
 }
 
-let nextId = 1;
-const generateId = () => `temp-${nextId++}`;
+const initialState: ActiveWorkoutState = {
+  status: "idle",
+  startedAt: null,
+  exercises: [],
+};
 
-export const useWorkoutStore = create<WorkoutState>((set) => ({
-  activeWorkout: null,
-  workoutHistory: [],
-  restTimer: { isRunning: false, remainingSeconds: 0 },
+export const useWorkoutStore = create<WorkoutStore>()(
+  persist(
+    (set, get) => ({
+      ...initialState,
 
-  startWorkout: (name) =>
-    set({
-      activeWorkout: {
-        id: generateId(),
-        userId: "",
-        name,
-        startedAt: new Date().toISOString(),
-        exercises: [],
+      startWorkout: () => {
+        if (get().status === "active") return; // Already active
+        set({
+          status: "active",
+          startedAt: new Date().toISOString(),
+          exercises: [],
+        });
+      },
+
+      finishWorkout: () => {
+        set(initialState);
+      },
+
+      cancelWorkout: () => {
+        set(initialState);
+      },
+
+      addExercise: (exercise) => {
+        const { status, exercises } = get();
+
+        const isNewWorkout = status === "idle";
+        const startedAt = isNewWorkout ? new Date().toISOString() : get().startedAt;
+
+        const exists = exercises.some((e) => e.exercise.id === exercise.id);
+        if (exists) return;
+
+        const initialSet: ActiveWorkoutSet = {
+          id: crypto.randomUUID(),
+          set_number: 1,
+          weight_kg: "",
+          reps: "",
+          is_completed: false,
+        };
+
+        const newExercise: ActiveWorkoutExercise = {
+          exercise,
+          sets: [initialSet],
+        };
+
+        set({
+          status: "active",
+          startedAt,
+          exercises: [...exercises, newExercise],
+        });
+      },
+
+      removeExercise: (exerciseId) => {
+        set((state) => ({
+          exercises: state.exercises.filter((e) => e.exercise.id !== exerciseId),
+        }));
+      },
+
+      addSet: (exerciseId) => {
+        set((state) => ({
+          exercises: state.exercises.map((ex) => {
+            if (ex.exercise.id === exerciseId) {
+              const lastSet = ex.sets[ex.sets.length - 1];
+              const newSet: ActiveWorkoutSet = {
+                id: crypto.randomUUID(),
+                set_number: ex.sets.length + 1,
+                // Carry over weight/reps from previous set for convenience
+                weight_kg: lastSet ? lastSet.weight_kg : "",
+                reps: lastSet ? lastSet.reps : "",
+                is_completed: false,
+              };
+              return { ...ex, sets: [...ex.sets, newSet] };
+            }
+            return ex;
+          }),
+        }));
+      },
+
+      removeSet: (exerciseId, setId) => {
+        set((state) => ({
+          exercises: state.exercises.map((ex) => {
+            if (ex.exercise.id === exerciseId) {
+              const filteredSets = ex.sets.filter((s) => s.id !== setId);
+              const renumberedSets = filteredSets.map((s, idx) => ({
+                ...s,
+                set_number: idx + 1,
+              }));
+              return { ...ex, sets: renumberedSets };
+            }
+            return ex;
+          }),
+        }));
+      },
+
+      updateSet: (exerciseId, setId, field, value) => {
+        set((state) => ({
+          exercises: state.exercises.map((ex) => {
+            if (ex.exercise.id === exerciseId) {
+              return {
+                ...ex,
+                sets: ex.sets.map((s) =>
+                  s.id === setId ? { ...s, [field]: value } : s
+                ),
+              };
+            }
+            return ex;
+          }),
+        }));
+      },
+
+      toggleSetComplete: (exerciseId, setId) => {
+        set((state) => ({
+          exercises: state.exercises.map((ex) => {
+            if (ex.exercise.id === exerciseId) {
+              return {
+                ...ex,
+                sets: ex.sets.map((s) =>
+                  s.id === setId ? { ...s, is_completed: !s.is_completed } : s
+                ),
+              };
+            }
+            return ex;
+          }),
+        }));
       },
     }),
-
-  cancelWorkout: () => set({ activeWorkout: null }),
-
-  completeWorkout: () =>
-    set((state) => {
-      if (!state.activeWorkout) return state;
-      const completed: Workout = {
-        ...state.activeWorkout,
-        completedAt: new Date().toISOString(),
-      };
-      return {
-        activeWorkout: null,
-        workoutHistory: [completed, ...state.workoutHistory],
-      };
-    }),
-
-  addExercise: (exercise) =>
-    set((state) => {
-      if (!state.activeWorkout) return state;
-      const newExercise: WorkoutExercise = {
-        ...exercise,
-        id: generateId(),
-        sets: [],
-      };
-      return {
-        activeWorkout: {
-          ...state.activeWorkout,
-          exercises: [...state.activeWorkout.exercises, newExercise],
-        },
-      };
-    }),
-
-  addSet: (exerciseIndex, setData) =>
-    set((state) => {
-      if (!state.activeWorkout) return state;
-      const exercises = [...state.activeWorkout.exercises];
-      const exercise = exercises[exerciseIndex];
-      if (!exercise) return state;
-      const newSet: WorkoutSet = {
-        ...setData,
-        id: generateId(),
-        setNumber: exercise.sets.length + 1,
-      };
-      exercises[exerciseIndex] = {
-        ...exercise,
-        sets: [...exercise.sets, newSet],
-      };
-      return {
-        activeWorkout: { ...state.activeWorkout, exercises },
-      };
-    }),
-
-  setWorkoutHistory: (workouts) => set({ workoutHistory: workouts }),
-
-  startRestTimer: (seconds) =>
-    set({ restTimer: { isRunning: true, remainingSeconds: seconds } }),
-
-  tickRestTimer: () =>
-    set((state) => {
-      const remaining = state.restTimer.remainingSeconds - 1;
-      if (remaining <= 0) {
-        return { restTimer: { isRunning: false, remainingSeconds: 0 } };
-      }
-      return { restTimer: { ...state.restTimer, remainingSeconds: remaining } };
-    }),
-
-  stopRestTimer: () =>
-    set({ restTimer: { isRunning: false, remainingSeconds: 0 } }),
-}));
+    {
+      name: "workout-storage", // name of the item in the storage (must be unique)
+      partialize: (state) => ({
+        status: state.status,
+        startedAt: state.startedAt,
+        exercises: state.exercises,
+      }),
+    }
+  )
+);

@@ -1,9 +1,20 @@
 import { Outlet, NavLink } from "react-router-dom";
 import { ROUTES } from "@/shared/constants";
 import { useState } from "react";
-import heroImg from "@/assets/hero.png";
 import { useAuth } from "@/features/auth";
+import { ActiveWorkoutDrawer } from "@/features/workouts/components/ActiveWorkoutDrawer";
+import {
+  Home,
+  Dumbbell,
+  History,
+  LayoutDashboard,
+  User,
+  ChevronRight,
+  ChevronLeft,
+  LogOut,
+} from "lucide-react";
 import { Modal, Button } from "@/shared/ui";
+import { BottomNav } from "./BottomNav";
 
 /**
  * MainLayout — The primary layout shell for authenticated pages.
@@ -15,12 +26,24 @@ export function MainLayout() {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
 
   const navItems = [
-    { to: ROUTES.HOME, label: "Home", icon: "🏠" },
-    { to: ROUTES.EXERCISES, label: "Exercises", icon: "💪" },
-    { to: ROUTES.WORKOUT_LOG, label: "New Workout", icon: "🏋️" },
-    { to: ROUTES.WORKOUT_HISTORY, label: "History", icon: "📋" },
-    { to: ROUTES.DASHBOARD, label: "Dashboard", icon: "📊" },
-    { to: ROUTES.PROFILE, label: "Profile", icon: "👤" },
+    { to: ROUTES.HOME, label: "Home", icon: <Home size={20} /> },
+    { to: ROUTES.EXERCISES, label: "Exercises", icon: <Dumbbell size={20} /> },
+    {
+      to: ROUTES.WORKOUT_LOG,
+      label: "New Workout",
+      icon: <Dumbbell size={20} />,
+    },
+    {
+      to: ROUTES.WORKOUT_HISTORY,
+      label: "History",
+      icon: <History size={20} />,
+    },
+    {
+      to: ROUTES.DASHBOARD,
+      label: "Dashboard",
+      icon: <LayoutDashboard size={20} />,
+    },
+    { to: ROUTES.PROFILE, label: "Profile", icon: <User size={20} /> },
   ];
 
   const handleLogoutConfirm = () => {
@@ -30,11 +53,11 @@ export function MainLayout() {
 
   return (
     <div className="flex h-screen bg-bg-base text-text-primary">
-      {/* ── Sidebar ─────────────────────────────────────── */}
+      {/* ── Sidebar (Desktop Only) ────────────────────────────── */}
       <aside
         className={`${
           openSideBar ? "w-64" : "w-20"
-        } flex-col border-r border-border bg-bg-subtle/50 flex transition-all duration-300 relative`}
+        } hidden lg:flex flex-col border-r border-border bg-bg-subtle/50 transition-all duration-300 relative`}
       >
         {/* Toggle Button (Absolute positioning for better handling) */}
         <button
@@ -42,7 +65,7 @@ export function MainLayout() {
           className="absolute -right-3 top-6 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border border-border bg-surface-raised text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary shadow-sm"
           aria-label={openSideBar ? "Collapse Sidebar" : "Expand Sidebar"}
         >
-          {openSideBar ? "◀" : "▶"}
+          {openSideBar ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
         </button>
 
         <div
@@ -62,11 +85,7 @@ export function MainLayout() {
             {openSideBar ? (
               "Work It Out"
             ) : (
-              <img
-                src={heroImg}
-                alt="logo"
-                className="h-8 w-8 object-contain"
-              />
+              <span className="text-2xl font-extrabold text-brand-DEFAULT">W</span>
             )}
           </span>
         </div>
@@ -77,6 +96,7 @@ export function MainLayout() {
               <NavLink
                 key={item.to}
                 to={item.to}
+                end={item.to === ROUTES.WORKOUT_HISTORY}
                 className={({ isActive }) =>
                   `flex items-center ${
                     openSideBar ? "gap-3 px-3" : "justify-center"
@@ -103,7 +123,7 @@ export function MainLayout() {
               } cursor-pointer rounded-lg py-2.5 text-sm font-medium text-status-danger-text transition-colors duration-200 hover:bg-status-danger-solid/10`}
               title={!openSideBar ? "Logout" : undefined}
             >
-              <span className="text-lg">🚪</span>
+              <span className="flex items-center justify-center"><LogOut size={20} /></span>
               {openSideBar && <span>Logout</span>}
             </button>
           </div>
@@ -121,10 +141,13 @@ export function MainLayout() {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 lg:pb-6 relative">
           <Outlet />
         </main>
       </div>
+
+      {/* ── Mobile Bottom Navigation ────────────────────── */}
+      <BottomNav />
 
       {/* ── Logout Confirmation Modal ───────────────────── */}
       <Modal
@@ -145,6 +168,9 @@ export function MainLayout() {
           </Button>
         </div>
       </Modal>
+
+      {/* Global Active Workout Overlay */}
+      <ActiveWorkoutDrawer />
     </div>
   );
 }

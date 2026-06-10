@@ -2,6 +2,7 @@
 
 import type { Exercise } from "@/features/exercises/types";
 import { Link } from "react-router-dom";
+import { Image as ImageIcon } from "lucide-react";
 
 interface ExerciseCardProps {
   exercise: Exercise;
@@ -22,8 +23,8 @@ export function ExerciseCard({ exercise }: ExerciseCardProps) {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-bg-subtle text-text-muted text-4xl">
-            🏋️
+          <div className="flex h-full w-full items-center justify-center bg-bg-subtle text-text-muted">
+            <ImageIcon size={48} strokeWidth={1} />
           </div>
         )}
         {/* Gradient overlay */}

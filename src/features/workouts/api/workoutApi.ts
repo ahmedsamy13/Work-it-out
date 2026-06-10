@@ -1,31 +1,88 @@
-// ─── Workout API Module ────────────────────────────────────────────
-
-import { apiClient } from "@/shared/lib";
-import type { ApiResponse, PaginatedResponse } from "@/shared/types";
-import type { Workout } from "../types";
-
-const BASE_PATH = "/workouts";
+import { supabase } from "@/shared/lib/supabase";
+import type { Workout, WorkoutSet } from "../types/workout.types";
 
 export const workoutApi = {
-  getAll: async (page = 1, limit = 20): Promise<PaginatedResponse<Workout>> => {
-    const { data } = await apiClient.get<PaginatedResponse<Workout>>(BASE_PATH, {
-      params: { page, limit },
-    });
-    return data;
+  // Save a completed workout and its sets
+  async saveWorkout(
+    userId: string,
+    startedAt: string,
+    endedAt: string,
+    exercises: {
+      exercise_id: string;
+      sets: {
+        set_number: number;
+        weight_kg: number | null;
+        reps: number | null;
+        is_completed: boolean;
+      }[];
+    }[]
+  ): Promise<{ workout: Workout; sets: WorkoutSet[] }> {
+    // 1. Insert Workout
+    const { data: workout, error: workoutError } = await supabase
+      .from("workouts")
+      .insert({
+        user_id: userId,
+        started_at: startedAt,
+        ended_at: endedAt,
+      })
+      .select("*")
+      .single();
+
+    if (workoutError) throw new Error(workoutError.message);
+
+    // 2. Prepare Sets for bulk insert
+    const setsToInsert = [];
+    for (const ex of exercises) {
+      for (const set of ex.sets) {
+        // Save if completed OR if it has any data
+        const hasData = set.weight_kg !== null || set.reps !== null;
+        if (!set.is_completed && !hasData) continue;
+
+        setsToInsert.push({
+          workout_id: workout.id,
+          exercise_id: ex.exercise_id,
+          set_number: set.set_number,
+          weight_kg: set.weight_kg,
+          reps: set.reps,
+          is_completed: set.is_completed,
+        });
+      }
+    }
+
+    // 3. Bulk Insert Sets
+    let insertedSets: WorkoutSet[] = [];
+    if (setsToInsert.length > 0) {
+      const { data: sets, error: setsError } = await supabase
+        .from("workout_sets")
+        .insert(setsToInsert)
+        .select("*");
+
+      if (setsError) {
+        // Rollback workout if sets fail
+        await supabase.from("workouts").delete().eq("id", workout.id);
+        throw new Error(setsError.message);
+      }
+      insertedSets = sets;
+    }
+
+    return { workout, sets: insertedSets };
   },
 
-  getById: async (id: string): Promise<ApiResponse<Workout>> => {
-    const { data } = await apiClient.get<ApiResponse<Workout>>(`${BASE_PATH}/${id}`);
-    return data;
-  },
+  // Get user's workout history with nested sets and exercises
+  async getWorkouts(userId: string): Promise<any[]> {
+    const { data, error } = await supabase
+      .from("workouts")
+      .select(`
+        *,
+        workout_sets (
+          *,
+          exercises (*)
+        )
+      `)
+      .eq("user_id", userId)
+      .order("started_at", { ascending: false });
 
-  create: async (workout: Omit<Workout, "id">): Promise<ApiResponse<Workout>> => {
-    const { data } = await apiClient.post<ApiResponse<Workout>>(BASE_PATH, workout);
-    return data;
-  },
-
-  delete: async (id: string): Promise<ApiResponse<null>> => {
-    const { data } = await apiClient.delete<ApiResponse<null>>(`${BASE_PATH}/${id}`);
+    if (error) throw new Error(error.message);
     return data;
   },
 };

@@ -1,44 +1,53 @@
-// ─── Workout Domain Types ──────────────────────────────────────────
+import type { ID } from "@/shared/types";
+import type { Exercise } from "@/features/exercises/types";
 
-import type { ID, Timestamp } from "@/shared/types";
-
-export interface WorkoutSet {
-  id: ID;
-  exerciseId: ID;
-  setNumber: number;
-  reps: number;
-  weight: number;
-  weightUnit: "kg" | "lbs";
-  rpe?: number; // Rate of Perceived Exertion (1-10)
-  isWarmup: boolean;
-  completedAt?: Timestamp;
-}
-
-export interface WorkoutExercise {
-  id: ID;
-  exerciseId: ID;
-  exerciseName: string;
-  sets: WorkoutSet[];
-  notes?: string;
-  restSeconds: number;
-}
+// Types corresponding to the Supabase Database Schema
 
 export interface Workout {
   id: ID;
-  userId: ID;
+  user_id: ID;
   name: string;
-  startedAt: Timestamp;
-  completedAt?: Timestamp;
-  exercises: WorkoutExercise[];
-  notes?: string;
-  durationSeconds?: number;
-  totalVolume?: number; // sum of (weight × reps) across all sets
+  started_at: string;
+  ended_at: string | null;
+  notes: string | null;
 }
 
-export interface WorkoutTemplate {
+export interface WorkoutSet {
   id: ID;
-  name: string;
-  exercises: Omit<WorkoutExercise, "id" | "sets">[];
+  workout_id: ID;
+  exercise_id: ID;
+  set_number: number;
+  weight_kg: number | null;
+  reps: number | null;
+  duration_seconds: number | null;
+  is_completed: boolean;
 }
 
-export type WorkoutStatus = "in-progress" | "completed" | "cancelled";
+// Full workout history nested type returned by Supabase
+export interface WorkoutHistoryWithSets extends Workout {
+  workout_sets: (WorkoutSet & {
+    exercises: Exercise;
+  })[];
+}
+
+// ─── Active Workout State Types ───────────────────────────────────────
+// These are used for the Zustand store while a workout is actively running
+
+export interface ActiveWorkoutSet {
+  id: string; // Temporary UUID for frontend tracking
+  set_number: number;
+  weight_kg: number | string; // string allows empty input
+  reps: number | string;
+  is_completed: boolean;
+}
+
+export interface ActiveWorkoutExercise {
+  exercise: Exercise;
+  sets: ActiveWorkoutSet[];
+}
+
+export interface ActiveWorkoutState {
+  status: "idle" | "active";
+  startedAt: string | null;
+  exercises: ActiveWorkoutExercise[];
+}

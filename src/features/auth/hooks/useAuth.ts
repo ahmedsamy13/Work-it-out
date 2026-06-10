@@ -4,6 +4,7 @@ import { ROUTES } from "@/shared/constants";
 import { authApi } from "../api/authApi";
 import { useAuthStore } from "../store/authStore";
 import type { LoginCredentials, RegisterCredentials } from "../types";
+import toast from "react-hot-toast";
 
 /**
  * Auth hook providing login, register, logout, and current user state.
@@ -22,6 +23,7 @@ export function useAuth() {
     onSuccess: (data) => {
       setUser(data.user);
       navigate(ROUTES.DASHBOARD);
+      toast.success("Welcome back!");
     },
     onSettled: () => setLoading(false),
   });
@@ -33,6 +35,7 @@ export function useAuth() {
     onSuccess: (data) => {
       setUser(data.user);
       navigate(ROUTES.DASHBOARD);
+      toast.success("Account created successfully!");
     },
     onSettled: () => setLoading(false),
   });
@@ -43,6 +46,7 @@ export function useAuth() {
     } finally {
       logoutAction();
       navigate(ROUTES.LOGIN);
+      toast.success("Logged out successfully");
     }
   };
 

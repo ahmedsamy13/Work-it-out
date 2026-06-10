@@ -1,5 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useExerciseById } from "@/features/exercises/hooks/useExercises";
+import { useWorkoutStore } from "@/features/workouts/store/workoutStore";
+import { AlertCircle, BookOpen, Target, Activity, Dumbbell } from "lucide-react";
 
 export function ExerciseDetailPage() {
   const { exerciseId } = useParams<{ exerciseId: string }>();
@@ -8,6 +10,8 @@ export function ExerciseDetailPage() {
     isLoading,
     error,
   } = useExerciseById(exerciseId ?? "");
+
+  const { addExercise } = useWorkoutStore();
 
   if (isLoading) {
     return (
@@ -23,7 +27,9 @@ export function ExerciseDetailPage() {
   if (error || !exercise) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <span className="text-5xl mb-4">😕</span>
+        <span className="mb-4 text-text-muted">
+          <AlertCircle size={64} strokeWidth={1} />
+        </span>
         <p className="text-lg font-medium text-text-primary">
           Exercise not found
         </p>
@@ -87,7 +93,7 @@ export function ExerciseDetailPage() {
         {exercise.description && (
           <div className="bg-surface/50 rounded-2xl p-6 border border-border/50 shadow-sm">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-brand-DEFAULT">📝</span>
+              <span className="text-brand-DEFAULT"><BookOpen size={20} /></span>
               <h2 className="text-lg font-bold text-text-primary">
                 Instructions
               </h2>
@@ -103,7 +109,7 @@ export function ExerciseDetailPage() {
           {/* Target Muscle */}
           <div className="rounded-2xl border border-border/50 bg-surface/80 backdrop-blur-md p-6 space-y-2 shadow-sm transition-all hover:border-brand-muted hover:shadow-brand-muted/10 hover:-translate-y-1">
             <div className="flex items-center gap-3 mb-2 text-text-brand">
-              <span className="text-2xl">💪</span>
+              <span className="text-brand-DEFAULT"><Target size={24} /></span>
               <p className="text-[12px] uppercase tracking-widest font-bold">
                 Target Muscle
               </p>
@@ -116,7 +122,7 @@ export function ExerciseDetailPage() {
           {/* Exercise Type */}
           <div className="rounded-2xl border border-border/50 bg-surface/80 backdrop-blur-md p-6 space-y-2 shadow-sm transition-all hover:border-brand-muted hover:shadow-brand-muted/10 hover:-translate-y-1">
             <div className="flex items-center gap-3 mb-2 text-text-brand">
-              <span className="text-2xl">⚡</span>
+              <span className="text-brand-DEFAULT"><Activity size={24} /></span>
               <p className="text-[12px] uppercase tracking-widest font-bold">
                 Exercise Type
               </p>
@@ -129,7 +135,7 @@ export function ExerciseDetailPage() {
           {/* Equipment */}
           <div className="rounded-2xl border border-border/50 bg-surface/80 backdrop-blur-md p-6 space-y-2 shadow-sm transition-all hover:border-brand-muted hover:shadow-brand-muted/10 hover:-translate-y-1">
             <div className="flex items-center gap-3 mb-2 text-text-brand">
-              <span className="text-2xl">🏋️</span>
+              <span className="text-brand-DEFAULT"><Dumbbell size={24} /></span>
               <p className="text-[12px] uppercase tracking-widest font-bold">
                 Equipment
               </p>
@@ -142,7 +148,10 @@ export function ExerciseDetailPage() {
 
         {/* CTA */}
         <div className="pt-4 mt-auto">
-          <button className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-brand-DEFAULT to-brand-secondary text-white text-lg font-bold rounded-2xl shadow-lg shadow-brand-DEFAULT/20 hover:shadow-brand-DEFAULT/40 hover:-translate-y-0.5 transition-all cursor-pointer flex items-center justify-center gap-2">
+          <button
+            onClick={() => addExercise(exercise)}
+            className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-brand-DEFAULT to-brand-secondary text-white text-lg font-bold rounded-2xl shadow-lg shadow-brand-DEFAULT/20 hover:shadow-brand-DEFAULT/40 hover:-translate-y-0.5 transition-all cursor-pointer flex items-center justify-center gap-2"
+          >
             <span>Add to Workout</span>
             <span className="text-xl">+</span>
           </button>
