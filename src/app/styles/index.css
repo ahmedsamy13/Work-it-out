@@ -29,13 +29,13 @@
   --color-brand-secondary:     #0ea5e9; /* sky-500 — gradient endpoint */
 
   /* ── Background Layers ────────────────────────────────────────── */
-  --color-bg-base:             #f8fafc; /* slate-50 — page background */
-  --color-bg-subtle:           #f1f5f9; /* slate-100 — slightly raised */
+  --color-bg-base:             #f3f4f6; /* gray-100 — softer page background */
+  --color-bg-subtle:           #e5e7eb; /* gray-200 — slightly raised */
 
   /* ── Surface (Cards, Panels, Modals) ─────────────────────────── */
-  --color-surface:             #ffffff; /* white */
-  --color-surface-raised:      #ffffff; /* white */
-  --color-surface-hover:       #f8fafc; /* slate-50 — hover state */
+  --color-surface:             #f9fafb; /* gray-50 — comfortable off-white */
+  --color-surface-raised:      #f9fafb; /* gray-50 — comfortable off-white */
+  --color-surface-hover:       #f3f4f6; /* gray-100 — hover state */
 
   /* ── Borders ──────────────────────────────────────────────────── */
   --color-border:              #e2e8f0; /* slate-200 — default border */
