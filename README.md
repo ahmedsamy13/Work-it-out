@@ -1,8 +1,8 @@
-# Work It Out 🏋️‍♂️
+# Work It Out
 
 A modern, highly modular fitness and workout tracking application built with React, Vite, and Supabase.
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Frontend**: React 19 + TypeScript
 - **Build Tool**: Vite
@@ -13,7 +13,7 @@ A modern, highly modular fitness and workout tracking application built with Rea
 - **Data Visualization**: Recharts
 - **Icons**: Lucide React
 
-## 🏗️ Architecture
+## Architecture
 
 This project follows a strict **Feature-Based (Modular) Architecture** to ensure scalability and maintainability. 
 
@@ -24,14 +24,14 @@ This project follows a strict **Feature-Based (Modular) Architecture** to ensure
 
 *See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for more details.*
 
-## 🎨 UI/UX Design
+## UI/UX Design
 
 The application features a clean, professional, and accessible **Light Theme** focused on readability and comfort:
 - Soft off-white backgrounds (`gray-50`, `gray-100`) to reduce glare and eye strain.
 - Trustworthy and energetic **Blue** (`blue-600`) as the primary brand color.
 - High-contrast typography for easy reading during workouts.
 
-## 🛠️ Getting Started
+## Getting Started
 
 1. **Install Dependencies**
    ```bash
@@ -55,7 +55,7 @@ The application features a clean, professional, and accessible **Light Theme** f
    npm run build
    ```
 
-## 📜 Scripts
+## Scripts
 
 - `npm run dev`: Start the development server
 - `npm run build`: Build the app for production
