@@ -21,12 +21,12 @@
 
 @theme {
   /* ── Brand / Primary ──────────────────────────────────────────── */
-  --color-brand-DEFAULT:       #6366f1; /* indigo-500 */
-  --color-brand-hover:         #4f46e5; /* indigo-600 */
-  --color-brand-muted:         rgba(99, 102, 241, 0.2); /* indigo-500/20 */
-  --color-brand-subtle:        rgba(99, 102, 241, 0.1); /* indigo-500/10 */
-  --color-brand-ring:          #6366f1; /* focus ring */
-  --color-brand-secondary:     #a855f7; /* purple-500 — gradient endpoint */
+  --color-brand-DEFAULT:       #ea580c; /* orange-600 */
+  --color-brand-hover:         #c2410c; /* orange-700 */
+  --color-brand-muted:         rgba(234, 88, 12, 0.2); /* orange-600/20 */
+  --color-brand-subtle:        rgba(234, 88, 12, 0.1); /* orange-600/10 */
+  --color-brand-ring:          #ea580c; /* orange-600 */
+  --color-brand-secondary:     #e11d48; /* rose-600 — gradient endpoint */
 
   /* ── Background Layers ────────────────────────────────────────── */
   --color-bg-base:             #09090b; /* zinc-950 — page background */
@@ -40,7 +40,7 @@
   /* ── Borders ──────────────────────────────────────────────────── */
   --color-border:              #27272a; /* zinc-800 — default border */
   --color-border-subtle:       #3f3f46; /* zinc-700 — input borders */
-  --color-border-focus:        #6366f1; /* brand on focus */
+  --color-border-focus:        #ea580c; /* brand on focus */
 
   /* ── Text Hierarchy ───────────────────────────────────────────── */
   --color-text-primary:        #f4f4f5; /* zinc-100 — headings, labels */
@@ -48,7 +48,7 @@
   --color-text-muted:          #71717a; /* zinc-500 — placeholder, hint text */
   --color-text-disabled:       #52525b; /* zinc-600 — disabled / icon muted */
   --color-text-inverse:        #09090b; /* for text on light backgrounds */
-  --color-text-brand:          #818cf8; /* indigo-400 — active nav, links */
+  --color-text-brand:          #fb923c; /* orange-400 — active nav, links */
   --color-text-subtle:         #d4d4d8; /* zinc-300 — mid-level text */
 
   /* ── Status: Success ─────────────────────────────────────────── */
@@ -70,9 +70,9 @@
   --color-status-danger-ring:  #ef4444;                /* red-500 */
 
   /* ── Status: Info ────────────────────────────────────────────── */
-  --color-status-info-bg:      rgba(30, 27, 75, 0.5);  /* indigo-900/50 */
-  --color-status-info-text:    #818cf8;                /* indigo-400 */
-  --color-status-info-border:  #3730a3;                /* indigo-800 */
+  --color-status-info-bg:      rgba(8, 47, 73, 0.5);   /* sky-900/50 */
+  --color-status-info-text:    #38bdf8;                /* sky-400 */
+  --color-status-info-border:  #075985;                /* sky-800 */
 
   /* ── Typography ──────────────────────────────────────────────── */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
