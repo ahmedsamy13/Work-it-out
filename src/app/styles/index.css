@@ -1,80 +1,112 @@
 @import "tailwindcss";
 
-/*
- * ─── Design Token System ────────────────────────────────────────────
- *
- * All brand colors, surface colors, and semantic tokens are defined
- * here using Tailwind v4's @theme block.
- *
- * To add dark/light mode in the future:
- *   1. Wrap token assignments in @media (prefers-color-scheme: light) {}
- *   2. Or use a [data-theme="light"] attribute on <html> and override below.
- *
- * Token Naming Convention:
- *   --color-bg-*       → Page-level background layers
- *   --color-surface-*  → Card / panel surfaces
- *   --color-border-*   → Border colors
- *   --color-text-*     → Text hierarchy
- *   --color-brand-*    → Primary brand accent (indigo/purple)
- *   --color-status-*   → Semantic state colors (success, warning, danger, info)
- */
+/* Oxblood + Bone — one light palette, with color-only compatibility aliases. */
+:root {
+  /* Warm neutral scale: chalk through graphite. */
+  --color-neutral-50: #fbf8f2;
+  --color-neutral-100: #f4efe7;
+  --color-neutral-200: #ebe4da;
+  --color-neutral-300: #d8cfc1;
+  --color-neutral-400: #b5a99a;
+  --color-neutral-500: #897e70;
+  --color-neutral-600: #6b6157;
+  --color-neutral-700: #4f473f;
+  --color-neutral-800: #332e29;
+  --color-neutral-900: #1c1b1a;
 
-@theme {
-  /* ── Brand / Primary ──────────────────────────────────────────── */
-  --color-brand-DEFAULT:       #2563eb; /* blue-600 */
-  --color-brand-hover:         #1d4ed8; /* blue-700 */
-  --color-brand-muted:         rgba(37, 99, 235, 0.1); /* blue-600/10 */
-  --color-brand-subtle:        rgba(37, 99, 235, 0.05); /* blue-600/5 */
-  --color-brand-ring:          #3b82f6; /* blue-500 */
-  --color-brand-secondary:     #0ea5e9; /* sky-500 — gradient endpoint */
+  --color-primary: #6e1f2a;
+  --color-primary-hover: #571822;
+  --color-primary-active: #42131a;
+  --color-primary-tonal: #843340;
+  --color-secondary: #805645;
+  --color-accent: #92672e;
+  --color-success: #3e6249;
+  --color-warning: #7a5525;
+  --color-error: #a13732;
+  --color-error-hover: #822b28;
+  --color-info: #405f69;
 
-  /* ── Background Layers ────────────────────────────────────────── */
-  --color-bg-base:             #f3f4f6; /* gray-100 — softer page background */
-  --color-bg-subtle:           #e5e7eb; /* gray-200 — slightly raised */
+  --color-bg: var(--color-neutral-100);
+  --color-surface-base: var(--color-neutral-50);
+  --color-surface-elevated: var(--color-neutral-50);
+  --color-surface-overlay: var(--color-neutral-50);
+  --color-surface-interactive: var(--color-neutral-200);
+  --color-text: var(--color-neutral-900);
+  --color-muted: var(--color-neutral-600);
+  --color-focus: var(--color-primary);
+  --color-selected: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface-base));
+  --color-disabled-bg: var(--color-neutral-300);
+  --color-disabled-text: var(--color-neutral-700);
+  --color-overlay: color-mix(in srgb, var(--color-neutral-900) 70%, transparent);
+  --color-image-shade: color-mix(in srgb, var(--color-neutral-900) 68%, transparent);
+  --color-image-deep: color-mix(in srgb, var(--color-neutral-900) 92%, transparent);
+  --color-shadow: color-mix(in srgb, var(--color-neutral-900) 14%, transparent);
+  --color-decoration: color-mix(in srgb, var(--color-secondary) 4%, transparent);
+  --color-decoration-hover: color-mix(in srgb, var(--color-secondary) 8%, transparent);
 
-  /* ── Surface (Cards, Panels, Modals) ─────────────────────────── */
-  --color-surface:             #f9fafb; /* gray-50 — comfortable off-white */
-  --color-surface-raised:      #f9fafb; /* gray-50 — comfortable off-white */
-  --color-surface-hover:       #f3f4f6; /* gray-100 — hover state */
+  --color-chart-1: var(--color-primary);
+  --color-chart-2: var(--color-secondary);
+  --color-chart-3: var(--color-accent);
+  --color-chart-4: #52604d;
+  --color-chart-5: #74625f;
+  --color-chart-6: #615c4d;
+  --color-chart-7: #4b5c60;
+  --color-chart-8: var(--color-neutral-500);
+}
 
-  /* ── Borders ──────────────────────────────────────────────────── */
-  --color-border:              #e2e8f0; /* slate-200 — default border */
-  --color-border-subtle:       #cbd5e1; /* slate-300 — input borders */
-  --color-border-focus:        #2563eb; /* brand on focus */
+/* Preserve every existing utility name, including the bare brand aliases. */
+@theme inline {
+  --color-brand: var(--color-primary);
+  --color-brand-DEFAULT: var(--color-primary);
+  --color-brand-hover: var(--color-primary-hover);
+  --color-brand-muted: var(--color-selected);
+  --color-brand-subtle: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-base));
+  --color-brand-ring: var(--color-focus);
+  /* Existing gradient endpoint stays in the oxblood family. */
+  --color-brand-secondary: var(--color-primary-tonal);
+  --color-bg-base: var(--color-bg);
+  --color-background: var(--color-bg);
+  --color-bg-subtle: var(--color-neutral-200);
+  --color-surface: var(--color-surface-base);
+  --color-surface-raised: var(--color-surface-elevated);
+  --color-surface-hover: var(--color-surface-interactive);
+  --color-border: var(--color-neutral-300);
+  --color-border-subtle: var(--color-neutral-500);
+  --color-border-focus: var(--color-focus);
+  --color-text-primary: var(--color-text);
+  --color-text-secondary: var(--color-neutral-700);
+  --color-text-muted: var(--color-muted);
+  --color-muted: var(--color-neutral-600);
+  --color-text-disabled: var(--color-disabled-text);
+  --color-text-inverse: var(--color-neutral-50);
+  --color-text-brand: var(--color-primary);
+  --color-text-subtle: var(--color-neutral-700);
 
-  /* ── Text Hierarchy ───────────────────────────────────────────── */
-  --color-text-primary:        #0f172a; /* slate-900 — headings, labels */
-  --color-text-secondary:      #334155; /* slate-700 — subtext, descriptions */
-  --color-text-muted:          #64748b; /* slate-500 — placeholder, hint text */
-  --color-text-disabled:       #94a3b8; /* slate-400 — disabled / icon muted */
-  --color-text-inverse:        #ffffff; /* for text on brand backgrounds */
-  --color-text-brand:          #2563eb; /* blue-600 — active nav, links */
-  --color-text-subtle:         #475569; /* slate-600 — mid-level text */
+  --color-status-success-bg: color-mix(in srgb, var(--color-success) 10%, var(--color-surface-base));
+  --color-status-success-text: var(--color-success);
+  --color-status-success-border: var(--color-success);
+  --color-status-warning-bg: color-mix(in srgb, var(--color-warning) 10%, var(--color-surface-base));
+  --color-status-warning-text: var(--color-warning);
+  --color-status-warning-border: var(--color-warning);
+  --color-status-danger-bg: color-mix(in srgb, var(--color-error) 10%, var(--color-surface-base));
+  --color-status-danger-text: var(--color-error);
+  --color-status-danger-border: var(--color-error);
+  --color-status-danger-solid: var(--color-error);
+  --color-status-danger-solid-hover: var(--color-error-hover);
+  --color-status-danger-ring: var(--color-error);
+  --color-status-info-bg: color-mix(in srgb, var(--color-info) 10%, var(--color-surface-base));
+  --color-status-info-text: var(--color-info);
+  --color-status-info-border: var(--color-info);
 
-  /* ── Status: Success ─────────────────────────────────────────── */
-  --color-status-success-bg:   #dcfce7; /* green-100 */
-  --color-status-success-text: #15803d; /* green-700 */
-  --color-status-success-border: #bbf7d0; /* green-200 */
-
-  /* ── Status: Warning ─────────────────────────────────────────── */
-  --color-status-warning-bg:   #fef3c7; /* amber-100 */
-  --color-status-warning-text: #b45309; /* amber-700 */
-  --color-status-warning-border: #fde68a; /* amber-200 */
-
-  /* ── Status: Danger ──────────────────────────────────────────── */
-  --color-status-danger-bg:    #fee2e2; /* red-100 */
-  --color-status-danger-text:  #b91c1c; /* red-700 */
-  --color-status-danger-border: #fecaca; /* red-200 */
-  --color-status-danger-solid: #ef4444; /* red-500 — danger button */
-  --color-status-danger-solid-hover: #dc2626; /* red-600 */
-  --color-status-danger-ring:  #f87171; /* red-400 */
-
-  /* ── Status: Info ────────────────────────────────────────────── */
-  --color-status-info-bg:      #dbeafe; /* blue-100 */
-  --color-status-info-text:    #1d4ed8; /* blue-700 */
-  --color-status-info-border:  #bfdbfe; /* blue-200 */
-
-  /* ── Typography ──────────────────────────────────────────────── */
+  /* Recolor hard-coded Tailwind utilities without touching component classes. */
+  --color-white: var(--color-neutral-50);
+  --color-black: var(--color-neutral-900);
+  --color-red-500: var(--color-error);
+  --color-green-400: var(--color-success);
+  --color-green-500: var(--color-success);
+  --color-yellow-400: var(--color-accent);
+  --color-purple-500: var(--color-secondary);
+  --color-purple-600: var(--color-primary-tonal);
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 }
 
@@ -142,11 +174,142 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: var(--color-surface-hover);
+    background-color: var(--color-neutral-500);
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-border-subtle);
+    background-color: var(--color-neutral-700);
   }
+}
+
+/* Color details; dimensions, typography, motion and shadow geometry are intact. */
+@layer base {
+  html { scrollbar-color: var(--color-neutral-500) var(--color-bg-subtle); }
+  ::selection { background-color: var(--color-primary); color: var(--color-text-inverse); }
+  input, textarea, select {
+    caret-color: var(--color-primary);
+    accent-color: var(--color-primary);
+  }
+  input::placeholder, textarea::placeholder { color: var(--color-muted); }
+  :focus-visible { outline-color: var(--color-focus); }
+}
+
+/* Bare brand utilities need explicit aliases alongside the legacy DEFAULT token. */
+.bg-brand { background-color: var(--color-primary); }
+.text-brand { color: var(--color-primary); }
+.border-brand { border-color: var(--color-primary); }
+.ring-brand, .focus\:ring-brand:focus { --tw-ring-color: var(--color-focus); }
+.focus\:border-brand:focus { border-color: var(--color-focus); }
+
+/* Unlayered rules intentionally outrank generated utilities and vendor CSS. */
+:where(button, a, input, textarea, select, [tabindex]):focus-visible {
+  --tw-ring-color: var(--color-focus);
+  outline-color: var(--color-focus);
+}
+:where(input, textarea, select).border-border { border-color: var(--color-border-subtle); }
+:where(input, textarea, select):focus-visible { border-color: var(--color-focus); }
+:where(input, textarea)[aria-invalid="true"] { border-color: var(--color-error); }
+input.border-status-danger-solid:focus-visible {
+  border-color: var(--color-error);
+  --tw-ring-color: var(--color-error);
+}
+:where(input, textarea)[aria-invalid="true"]:focus-visible { --tw-ring-color: var(--color-error); }
+:where(button, a)[class~="bg-brand"]:not(:disabled):hover,
+:where(button, a)[class~="bg-brand-DEFAULT"]:not(:disabled):hover {
+  background-color: var(--color-primary-hover);
+}
+:where(button, a)[class~="bg-brand"]:not(:disabled):active,
+:where(button, a)[class~="bg-brand-DEFAULT"]:not(:disabled):active {
+  background-color: var(--color-primary-active);
+}
+:where(button, a)[class*="from-brand-DEFAULT"]:not(:disabled):hover {
+  --tw-gradient-from: var(--color-primary-hover);
+  --tw-gradient-to: var(--color-primary);
+}
+:where(button, a)[class*="from-brand-DEFAULT"]:not(:disabled):active {
+  --tw-gradient-from: var(--color-primary-active);
+  --tw-gradient-to: var(--color-primary-hover);
+}
+:where(button, input, textarea, select):disabled {
+  background-color: var(--color-disabled-bg);
+  color: var(--color-disabled-text);
+  border-color: var(--color-border-subtle);
+}
+button:disabled[class*="from-brand-DEFAULT"] {
+  --tw-gradient-from: var(--color-disabled-bg);
+  --tw-gradient-to: var(--color-disabled-bg);
+}
+[role="tab"][aria-selected="true"] { border-color: var(--color-primary); color: var(--color-primary); }
+.text-text-muted\/50 { color: var(--color-muted); }
+.text-border { color: var(--color-neutral-500); }
+.text-white\/90 { color: var(--color-text-inverse); }
+
+/* Recolor existing shadows, including hover variants, to eliminate colored glows. */
+[class*="shadow-"] { --tw-shadow-color: var(--color-shadow); }
+
+/* Existing blurred decoration is a quiet clay tint rather than a brand glow. */
+.pointer-events-none.blur-3xl { background-color: var(--color-decoration); }
+.group:hover .pointer-events-none.blur-3xl { background-color: var(--color-decoration-hover); }
+
+/* Chalk titles must remain legible over even a completely white photograph. */
+.bg-black\/30, .bg-black\/50, .bg-black\/60 { background-color: var(--color-overlay); }
+.from-black\/60 { --tw-gradient-from: var(--color-overlay); }
+.bg-gradient-to-t.from-bg-subtle {
+  --tw-gradient-from: var(--color-image-deep);
+  --tw-gradient-via: var(--color-image-shade);
+  --tw-gradient-to: var(--color-image-shade);
+}
+.bg-green-400 { background-color: var(--color-success); }
+.bg-brand-DEFAULT .bg-green-400 { background-color: var(--color-text-inverse); }
+
+/* Chart data fills are SVG presentation attributes; CSS can override them. */
+.recharts-wrapper [fill="#4f46e5"] { fill: var(--color-chart-1); }
+.recharts-tooltip-wrapper [style*="background-color: #4f46e5"],
+.recharts-tooltip-wrapper [style*="background-color: rgb(79, 70, 229)"] { background-color: var(--color-chart-1) !important; }
+.recharts-wrapper [fill="#8b5cf6"] { fill: var(--color-chart-2); }
+.recharts-tooltip-wrapper [style*="background-color: #8b5cf6"],
+.recharts-tooltip-wrapper [style*="background-color: rgb(139, 92, 246)"] { background-color: var(--color-chart-2) !important; }
+.recharts-wrapper [fill="#ec4899"] { fill: var(--color-chart-3); }
+.recharts-tooltip-wrapper [style*="background-color: #ec4899"],
+.recharts-tooltip-wrapper [style*="background-color: rgb(236, 72, 153)"] { background-color: var(--color-chart-3) !important; }
+.recharts-wrapper [fill="#f43f5e"] { fill: var(--color-chart-4); }
+.recharts-tooltip-wrapper [style*="background-color: #f43f5e"],
+.recharts-tooltip-wrapper [style*="background-color: rgb(244, 63, 94)"] { background-color: var(--color-chart-4) !important; }
+.recharts-wrapper [fill="#f97316"] { fill: var(--color-chart-5); }
+.recharts-tooltip-wrapper [style*="background-color: #f97316"],
+.recharts-tooltip-wrapper [style*="background-color: rgb(249, 115, 22)"] { background-color: var(--color-chart-5) !important; }
+.recharts-wrapper [fill="#eab308"] { fill: var(--color-chart-6); }
+.recharts-tooltip-wrapper [style*="background-color: #eab308"],
+.recharts-tooltip-wrapper [style*="background-color: rgb(234, 179, 8)"] { background-color: var(--color-chart-6) !important; }
+.recharts-wrapper [fill="#10b981"] { fill: var(--color-chart-7); }
+.recharts-tooltip-wrapper [style*="background-color: #10b981"],
+.recharts-tooltip-wrapper [style*="background-color: rgb(16, 185, 129)"] { background-color: var(--color-chart-7) !important; }
+.recharts-wrapper [fill="#06b6d4"] { fill: var(--color-chart-8); }
+.recharts-tooltip-wrapper [style*="background-color: #06b6d4"],
+.recharts-tooltip-wrapper [style*="background-color: rgb(6, 182, 212)"] { background-color: var(--color-chart-8) !important; }
+
+/* Toast colors are injected by goober after app CSS; scope overrides to Toaster. */
+[data-rht-toaster] .bg-surface {
+  background-color: var(--color-surface-overlay) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border);
+}
+[data-rht-toaster] .bg-surface > div:first-child > div:last-child > div {
+  background-color: var(--color-neutral-800) !important;
+}
+[data-rht-toaster] .bg-surface > div:first-child > div:last-child > div[primary="#4ade80"] {
+  background-color: var(--color-success) !important;
+}
+[data-rht-toaster] .bg-surface > div:first-child > div:last-child > div[primary="#ef4444"] {
+  background-color: var(--color-error) !important;
+}
+[data-rht-toaster] .bg-surface > div:first-child > div:last-child > div::before,
+[data-rht-toaster] .bg-surface > div:first-child > div:last-child > div::after {
+  background-color: var(--color-text-inverse) !important;
+  border-color: var(--color-text-inverse) !important;
+}
+[data-rht-toaster] .bg-surface > div:first-child > div:first-child {
+  border-color: var(--color-border) !important;
+  border-right-color: var(--color-primary) !important;
 }
